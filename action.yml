@@ -5,15 +5,14 @@ branding:
   color: blue
   icon: anchor
 inputs:
-  image:
-    description: "The kubeval-helm-chart Docker image to use"
-  config:
-    description: "The relative path to the ckubeval-helm-chart config file"
-  command:
-    description: "The kubeval-helm-chart command to run"
+  version:
+    description: "The kubeval version to use (default: 0.15.0)"
+  charts_dir:
+    description: "The charts directory"
+    default: charts
+  k8s_version:
+    description: "The kubernetes version to validate the schema"
     required: true
-  kubeconfig:
-    description: "The path to the kube config file"
 outputs:
   changed:
     description: "Whether or not charts have changed (true/false)"

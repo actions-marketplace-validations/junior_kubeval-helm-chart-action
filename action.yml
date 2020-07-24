@@ -2,8 +2,8 @@ name: "Kubeval Helm Chart"
 description: "Validate Helm Charts extracted Kubernetes manifests using the upstream Schemas"
 author: "Adao Oliveira Junior"
 branding:
-  color: blue
-  icon: anchor
+  color: orange
+  icon: check-circle
 inputs:
   version:
     description: "The kubeval version to use (default: 0.15.0)"

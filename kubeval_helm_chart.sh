@@ -5,7 +5,7 @@ set -o nounset
 set -o pipefail
 
 DEFAULT_KUBEVAL_VERSION=0.15.0
-DEFAULT_CHART_DIRS="$(git diff --find-renames --name-only "$(git rev-parse --abbrev-ref HEAD)" remotes/origin/master -- charts | grep '[cC]hart.yaml' | sed -e 's#/[Cc]hart.yaml##g')"
+# DEFAULT_CHART_DIRS="$(git diff --find-renames --name-only "$(git rev-parse --abbrev-ref HEAD)" remotes/origin/master -- charts | grep '[cC]hart.yaml' | sed -e 's#/[Cc]hart.yaml##g')"
 DEFAULT_SCHEMA_LOCATION="https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/"
 
 show_help() {
@@ -21,13 +21,14 @@ EOF
 main() {
     local kubeval_version="$DEFAULT_KUBEVAL_VERSION"
     local kubernetes_version=
-    local chart_dirs=$DEFAULT_CHART_DIRS
+    # local chart_dirs=$DEFAULT_CHART_DIRS
     local charts_dir=charts
     local schema_location=$DEFAULT_SCHEMA_LOCATION
+    local k8s_version=
 
     parse_command_line "$@"
 
-    if [[ -z "$k8s-version" ]]; then
+    if [[ -z "$k8s_version" ]]; then
         echo "ERROR: '-k|--k8s-version' is required." >&2
         show_help
         exit 1
@@ -56,7 +57,7 @@ main() {
         echo "Nothing to do. No chart changes detected."
     fi
 
-    popd > /dev/null
+    # popd > /dev/null
 }
 
 parse_command_line() {
@@ -154,6 +155,21 @@ kubeval_chart() {
     echo "Validating chart '$chart'..."
 
     helm template --values "$chart"/ci/ci-values.yaml "$chart" | ./kubeval --strict --ignore-missing-schemas --kubernetes-version "${k8s_version#v}" --schema-location "$schema_location"
+}
+
+readarray_macos() {
+  local __resultvar=$1
+  declare -a __local_array
+  let i=0
+  while IFS=$'\n' read -r line_data; do
+      __local_array[i]=${line_data}
+      ((++i))
+  done < $2
+  if [[ "$__resultvar" ]]; then
+    eval $__resultvar="'${__local_array[@]}'"
+  else
+    echo "${__local_array[@]}"
+  fi
 }
 
 main "$@"

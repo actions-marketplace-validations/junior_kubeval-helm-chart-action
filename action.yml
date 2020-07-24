@@ -1,6 +1,6 @@
-name: "Helm Chart Testing"
-description: "Run the Helm chart-testing tool"
-author: "The Helm authors"
+name: "Kubeval Helm Chart"
+description: "Validate Helm Charts extracted Kubernetes manifests using the upstream Schemas"
+author: "Adao Oliveira Junior"
 branding:
   color: blue
   icon: anchor
